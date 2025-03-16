@@ -2,6 +2,7 @@ package controller
 
 import (
 	"item-catalog/model"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,9 +15,9 @@ func NewItemController(store *model.ItemStore) *ItemController {
 	return &ItemController{store: store}
 }
 
-func (c *ItemController) GetItems(ctx *gin.Context) {
-	items := c.store.GetAll()
-	responseItems := make(map[string]model.ItemResponse, len(items))
+func (ic *ItemController) GetItems(c *gin.Context) {
+	items := ic.store.GetAll()
+	responseItems := make(map[string]model.ItemResponse)
 	for id, item := range items {
 		responseItems[id] = model.ItemResponse{
 			ID:    item.ID,
@@ -24,28 +25,23 @@ func (c *ItemController) GetItems(ctx *gin.Context) {
 			Price: item.Price,
 		}
 	}
-	ctx.JSON(200, model.ItemsResponse{Items: responseItems})
+	c.JSON(200, model.ItemsResponse{Items: responseItems})
 }
 
-func (c *ItemController) AddItem(ctx *gin.Context) {
-	var req model.ItemRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(400, gin.H{"error": err.Error()})
+func (ic *ItemController) AddItem(c *gin.Context) {
+	var itemReq model.ItemRequest
+	if err := c.ShouldBindJSON(&itemReq); err != nil {
+		log.Printf("Error binding JSON: %v", err)
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	item := model.Item{
-		ID:    req.ID,
-		Name:  req.Name,
-		Price: req.Price,
+		ID:    itemReq.ID,
+		Name:  itemReq.Name,
+		Price: itemReq.Price,
 	}
 
-	c.store.Add(item)
-
-	response := model.ItemResponse{
-		ID:    item.ID,
-		Name:  item.Name,
-		Price: item.Price,
-	}
-	ctx.JSON(201, response)
+	ic.store.Add(item)
+	c.JSON(201, gin.H{"message": "Item added successfully"})
 }

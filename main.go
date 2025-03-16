@@ -12,10 +12,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+var store *model.ItemStore
+
+func init() {
+
+	store = model.NewItemStore()
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Load()
-	store := model.NewItemStore()
+
 	itemController := controller.NewItemController(store)
+
+	ginMode := gin.ReleaseMode
+	if cfg.Env == "development" {
+		ginMode = gin.DebugMode
+	}
+	gin.SetMode(ginMode)
 
 	router := gin.Default()
 
@@ -53,8 +66,11 @@ func main() {
 		c.File(filePath)
 	})
 
-	log.Printf("Server running in %s mode on port %s", cfg.Env, cfg.Port)
-	if err := router.Run(":" + cfg.Port); err != nil {
-		log.Fatal(err)
-	}
+	router.ServeHTTP(w, r)
+}
+
+func main() {
+	cfg := config.Load()
+	log.Printf("Running locally in %s mode on port %s", cfg.Env, cfg.Port)
+	http.ListenAndServe(":"+cfg.Port, http.HandlerFunc(Handler))
 }
