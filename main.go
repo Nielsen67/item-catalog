@@ -41,7 +41,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	{
 		api.GET("/items", itemController.GetItems)
 		api.POST("/items", itemController.AddItem)
-		api.DELETE("/items/remove", itemController.ClearItems)
+		api.DELETE("/items/clear", itemController.ClearItems)
 	}
 
 	router.NoRoute(func(c *gin.Context) {

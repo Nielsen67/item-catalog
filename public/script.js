@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchItems();
 
+    // Add item form submission
     document.getElementById('itemForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -26,6 +27,26 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => document.getElementById('error').textContent = '', 2000);
             fetchItems();
             e.target.reset();
+        } catch (error) {
+            document.getElementById('error').textContent = error.message;
+        }
+    });
+
+    // Clear items button
+    document.getElementById('clear-items').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/api/items/clear', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to clear items: ${response.statusText}`);
+            }
+
+            document.getElementById('error').textContent = 'Items cleared successfully!';
+            setTimeout(() => document.getElementById('error').textContent = '', 2000);
+            fetchItems(); // Refresh the item list after clearing
         } catch (error) {
             document.getElementById('error').textContent = error.message;
         }
