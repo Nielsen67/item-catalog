@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Catalog</title>
+    <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+<body>
+    <h1>Item Catalog</h1>
+    
+    <form id="itemForm">
+        <h2>Add Item</h2>
+        <input type="text" id="id" placeholder="ID" required>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="number" id="price" placeholder="Price" min="0" step="0.01" required>
+        <button type="submit">Add Item</button>
+    </form>
+    <p id="error" class="error"></p>
+
+    <h2 id="item-list-header">Items</h2>
+    <ul id="itemList" class="item-list"></ul>
+
+    <script src="/script.js"></script>
+</body>
+</html>
