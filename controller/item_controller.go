@@ -45,3 +45,8 @@ func (ic *ItemController) AddItem(c *gin.Context) {
 	ic.store.Add(item)
 	c.JSON(201, gin.H{"message": "Item added successfully"})
 }
+
+func (ic *ItemController) ClearItems(c *gin.Context) {
+	ic.store.ClearAll()
+	c.JSON(204, gin.H{"message": "Items cleared successfully"})
+}

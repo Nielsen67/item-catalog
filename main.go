@@ -1,4 +1,4 @@
-package handler
+package main
 
 import (
 	"log"
@@ -41,6 +41,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	{
 		api.GET("/items", itemController.GetItems)
 		api.POST("/items", itemController.AddItem)
+		api.DELETE("/items/remove", itemController.ClearItems)
 	}
 
 	router.NoRoute(func(c *gin.Context) {
@@ -69,8 +70,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router.ServeHTTP(w, r)
 }
 
-// func main() {
-// 	cfg := config.Load()
-// 	log.Printf("Running locally in %s mode on port %s", cfg.Env, cfg.Port)
-// 	http.ListenAndServe(":"+cfg.Port, http.HandlerFunc(Handler))
-// }
+func main() {
+	cfg := config.Load()
+	log.Printf("Running locally in %s mode on port %s", cfg.Env, cfg.Port)
+	http.ListenAndServe(":"+cfg.Port, http.HandlerFunc(Handler))
+}

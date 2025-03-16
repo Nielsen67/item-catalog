@@ -39,3 +39,7 @@ func (s *ItemStore) GetAll() map[string]Item {
 func (s *ItemStore) Add(item Item) {
 	s.items[item.ID] = item
 }
+
+func (s *ItemStore) ClearAll() {
+	s.items = make(map[string]Item)
+}
