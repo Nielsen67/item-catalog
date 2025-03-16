@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"log"
@@ -69,8 +69,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router.ServeHTTP(w, r)
 }
 
-func main() {
-	cfg := config.Load()
-	log.Printf("Running locally in %s mode on port %s", cfg.Env, cfg.Port)
-	http.ListenAndServe(":"+cfg.Port, http.HandlerFunc(Handler))
-}
+// func main() {
+// 	cfg := config.Load()
+// 	log.Printf("Running locally in %s mode on port %s", cfg.Env, cfg.Port)
+// 	http.ListenAndServe(":"+cfg.Port, http.HandlerFunc(Handler))
+// }
